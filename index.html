@@ -112,12 +112,43 @@
             100% { opacity: 0; transform: scale(0.2); }
         }
 
+        
         @media (max-width: 768px) {
             #cursor-singularity, .star-trail {
                 display: none;
             }
             body {
                 cursor: auto;
+            }
+            
+            
+            .hero-name {
+                color: #ffffff !important;
+                background-image: none !important;
+                -webkit-text-fill-color: #ffffff !important;
+            }
+
+            
+            .terminal-container {
+                perspective: none !important;
+            }
+            .terminal-grid {
+                transform: none !important;
+            }
+            
+            .warp-card {
+                width: 90%;
+                padding: 1.5rem;
+            }
+            .card-number {
+                font-size: 2.5rem;
+                top: -15px;
+                left: 10px;
+                opacity: 0.3;
+            }
+            .warp-sticky h2 {
+                top: 5rem !important;
+                font-size: 2rem !important;
             }
         }
 
@@ -353,23 +384,6 @@
             z-index: 1;
         }
 
-        @media (max-width: 768px) {
-            .warp-card {
-                width: 90%;
-                padding: 1.5rem;
-            }
-            .card-number {
-                font-size: 2.5rem;
-                top: -15px;
-                left: 10px;
-                opacity: 0.3;
-            }
-            .warp-sticky h2 {
-                top: 5rem !important;
-                font-size: 2rem !important;
-            }
-        }
-
         .terminal-container {
             perspective: 1000px;
             transform-style: preserve-3d;
@@ -446,6 +460,29 @@
             font-size: 0.8rem;
         }
 
+        
+        #mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        #mobile-menu.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
         @media (min-width: 640px) {
             .terminal-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -475,6 +512,17 @@
 
     <div id="canvas-container"></div>
 
+   
+    <div id="mobile-menu">
+        <button id="close-menu" class="absolute top-6 right-6 text-3xl text-white"><i class="fas fa-times"></i></button>
+        <div class="flex flex-col gap-8 text-2xl font-bold brand-font text-white text-center">
+            <a href="#about" class="mobile-link hover:text-cyan-400">Manifesto</a>
+            <a href="#interests" class="mobile-link hover:text-cyan-400">Nexus</a>
+            <a href="#journey" class="mobile-link hover:text-cyan-400">Journey</a>
+            <a href="#contact" class="mobile-link hover:text-cyan-400">Contact</a>
+        </div>
+    </div>
+
     <nav class="fixed top-0 w-full z-50 px-6 py-6 flex justify-between items-center mix-blend-difference text-white">
         <a href="#" class="logo-container group">
             <span class="logo-text logo-top">ABHIRAM</span>
@@ -486,7 +534,7 @@
             <a href="#journey" class="hover-trigger hover:text-gray-400 transition-colors">Journey</a>
             <a href="#contact" class="hover-trigger hover:text-gray-400 transition-colors">Contact</a>
         </div>
-        <button class="md:hidden text-2xl hover-trigger"><i class="fas fa-bars"></i></button>
+        <button id="menu-btn" class="md:hidden text-2xl hover-trigger"><i class="fas fa-bars"></i></button>
     </nav>
 
     <main class="relative z-10">
@@ -502,12 +550,13 @@
                 </h1>
                 
                 <div class="hero-element flex flex-col md:flex-row gap-8 items-start md:items-center mt-8" style="transition-delay: 0.2s;">
-                    <div class="glass-panel p-4 rounded-full flex items-center gap-4 hover-trigger cursor-pointer group transition-transform hover:scale-105">
+                    
+                    <a href="#interests" class="glass-panel p-4 rounded-full flex items-center gap-4 hover-trigger cursor-pointer group transition-transform hover:scale-105">
                         <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-black">
                             <i class="fas fa-arrow-down transform group-hover:rotate-45 transition-transform"></i>
                         </div>
                         <span class="pr-4 font-semibold">Explore the System</span>
-                    </div>
+                    </a>
                 </div>
             </div>
 
@@ -986,6 +1035,28 @@
             statusEl.innerText = 'SYSTEM STANDBY // AWAITING INPUT';
             statusEl.style.textShadow = "0 0 10px rgba(0, 229, 255, 0.5)";
             statusEl.style.color = "#00e5ff";
+        }
+
+        
+        const menuBtn = document.getElementById('menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (menuBtn && mobileMenu && closeMenuBtn) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.add('open');
+            });
+
+            closeMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                });
+            });
         }
 
         window.addEventListener('load', () => {
