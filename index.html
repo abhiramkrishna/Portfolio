@@ -142,19 +142,30 @@
                 transform: none !important;
             }
             
-            .interest-card {
-                flex: 0 0 85vw !important; 
-                margin-right: 1rem;
+            /* Mobile 3D Parallax Scroll Setup */
+            .interests-carousel {
+                overflow: hidden;
+                perspective: 800px; /* Depth perspective */
+                padding-top: 20px;
+                padding-bottom: 20px;
             }
 
             .carousel-track {
-                animation: mobileScroll 20s linear infinite;
+                animation: mobileScroll 15s linear infinite alternate;
                 width: max-content;
                 padding-left: 1rem;
+                display: flex;
+                transform-style: preserve-3d;
             }
-
-            .interests-carousel {
-                overflow: hidden;
+            
+            .interest-card {
+                flex: 0 0 80vw !important; 
+                margin-right: 1.5rem;
+                /* 3D Parallax Effect */
+                transform: rotateY(15deg) translateZ(-10px);
+                box-shadow: -10px 10px 20px rgba(0,0,0,0.5);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                background: rgba(10, 10, 15, 0.95); /* Increased opacity for readability */
             }
 
             .outline-text {
@@ -165,9 +176,8 @@
         }
 
         @keyframes mobileScroll {
-            0% { transform: translateX(0); }
-            50% { transform: translateX(-50%); }
-            100% { transform: translateX(0); }
+            0% { transform: translateX(0) rotateX(0deg); }
+            100% { transform: translateX(calc(-100% + 90vw)); } /* Scroll to end */
         }
 
         .hero-title {
