@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abhiram Krishna">
+    <meta name="The Author" content="Abhiram Krishna">
+    <title>About - Abhiram Krishna</title>
+    
+    <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23000000" stroke="%2300e5ff" stroke-width="3"/><path d="M10,50 Q50,0 90,50 Q50,100 10,50" fill="none" stroke="%23ff0055" stroke-width="3" opacity="0.8"/><circle cx="70" cy="30" r="8" fill="%23ffffff"/><circle cx="20" cy="70" r="4" fill="%23ffffff" opacity="0.5"/></svg>'>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;600&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cursor-size: 20px;
+            --cursor-hover-size: 80px;
+        }
+
+        body {
+            background: linear-gradient(180deg, #020205 0%, #050510 20%, #0a0a1a 40%, #0f172a 70%, #050505 100%);
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+            cursor: none;
+        }
+
+        h1, h2, h3, .brand-font {
+            font-family: 'Syne', sans-serif;
+        }
+
+        .tech-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        #cursor-singularity {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 12px;
+            height: 12px;
+            background: #000;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            mix-blend-mode: difference;
+        }
+
+        body.hovering #cursor-singularity {
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-color: #00e5ff;
+            box-shadow: 0 0 30px #00e5ff;
+            mix-blend-mode: exclusion;
+        }
+
+        @media (max-width: 768px) {
+            #cursor-singularity {
+                display: none;
+            }
+            body {
+                cursor: auto;
+            }
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Nav Styles */
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            position: relative;
+            padding: 0.5rem;
+            transition: all 0.4s ease;
+            gap: 2px;
+        }
+
+        .logo-text {
+            font-family: 'Michroma', sans-serif;
+            font-weight: 400;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            line-height: 1.1;
+            transition: all 0.5s ease;
+        }
+
+        .logo-line-1 { color: #fff; }
+        .logo-line-2 { color: rgba(255, 255, 255, 0.6); }
+
+        .logo-container:hover .logo-text {
+            text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(0,229,255,0.6);
+            letter-spacing: 0.3em;
+            transform: scale(1.05);
+            color: #fff;
+        }
+        
+        .logo-container:hover .logo-line-1 { transform: translateX(-5px); }
+        .logo-container:hover .logo-line-2 { transform: translateX(5px); color: #00e5ff; }
+
+        #mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        #mobile-menu.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Footer Grid */
+        .terminal-container { perspective: 1000px; transform-style: preserve-3d; }
+        .terminal-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            transform: rotateX(20deg) scale(0.9);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .terminal-container:hover .terminal-grid { transform: rotateX(0deg) scale(1); }
+
+        .signal-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .signal-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--signal-color, #fff);
+            box-shadow: 0 0 20px var(--signal-glow, rgba(255,255,255,0.1));
+            transform: translateZ(20px);
+        }
+        .signal-card .signal-icon { color: rgba(255,255,255,0.5); transition: color 0.3s; font-size: 1.5rem; }
+        .signal-card:hover .signal-icon { color: var(--signal-color, #fff); }
+
+        .status-display {
+            font-family: 'Orbitron', sans-serif;
+            color: #00e5ff;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+            min-height: 24px;
+            margin-bottom: 2rem;
+            letter-spacing: 0.2em;
+            font-size: 0.8rem;
+        }
+
+        @media (min-width: 640px) {
+            .terminal-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 768px) {
+            .terminal-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        /* --- BENTO GRID STYLES MATCHING REFERENCE --- */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: 25% 1fr; /* Exact proportions from reference (Left bar, Right content) */
+                grid-template-rows: auto;
+            }
+        }
+
+        /* Left Profile Card */
+        .profile-card {
+            background: rgba(20, 20, 35, 0.6);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 2rem; /* Large rounded corners from ref */
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            min-height: 600px;
+        }
+
+        /* Right Content Area */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .grid-middle {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .grid-middle {
+                grid-template-columns: 2fr 1fr; /* 2/3 Wide card, 1/3 Small stack */
+            }
+        }
+
+        .grid-bottom {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .grid-bottom {
+                grid-template-columns: 1fr 2fr; /* 1/3 Small card, 2/3 Wide card */
+            }
+        }
+
+        .bento-card {
+            border-radius: 2rem; /* Consistent large radius */
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s;
+            border: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+        }
+
+        .bento-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.2);
+            z-index: 10;
+        }
+
+        /* Colors based on theme but mapped to reference layout slots */
+        .card-bg-purple { background: linear-gradient(135deg, rgba(88, 28, 135, 0.3), rgba(15, 23, 42, 0.6)); }
+        .card-bg-cyan { background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(15, 23, 42, 0.6)); }
+        .card-bg-green { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(15, 23, 42, 0.6)); }
+        .card-bg-orange { background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(15, 23, 42, 0.6)); }
+        .card-bg-dark { background: rgba(5, 5, 10, 0.8); }
+
+        .rotating-badge {
+            animation: spin 10s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 229, 255, 0.5);
+            box-shadow: 0 0 10px #00e5ff;
+            animation: scan 3s linear infinite;
+            opacity: 0.3;
+        }
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="cursor-singularity"></div>
+    <div id="canvas-container"></div>
+
+    <div id="mobile-menu">
+        <button id="close-menu" class="absolute top-6 right-6 text-3xl text-white"><i class="fas fa-times"></i></button>
+        <div class="flex flex-col gap-8 text-2xl font-bold brand-font text-white text-center">
+            <a href="index.html" class="mobile-link hover:text-cyan-400">Home</a>
+            <a href="index.html#interests" class="mobile-link hover:text-cyan-400">Nexus</a>
+            <a href="index.html#education" class="mobile-link hover:text-cyan-400">Launch Pad</a>
+            <a href="index.html#experience" class="mobile-link hover:text-cyan-400">Trajectory</a>
+            <a href="about.html" class="mobile-link hover:text-cyan-400">About Me</a>
+            <a href="#contact" class="mobile-link hover:text-cyan-400">Contact</a>
+        </div>
+    </div>
+
+    <nav class="fixed top-0 w-full z-50 px-6 py-6 flex justify-between items-center mix-blend-normal text-white">
+        <div class="absolute inset-0 -z-10 w-full h-full pointer-events-none" 
+             style="background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%); 
+                    backdrop-filter: blur(10px); 
+                    -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%); 
+                    mask-image: linear-gradient(to bottom, black 0%, transparent 100%);">
+        </div>
+
+        <a href="index.html" class="logo-container group">
+            <span class="logo-text logo-line-1">ABHIRAM</span>
+            <span class="logo-text logo-line-2">KRISHNA</span>
+        </a>
+        <div class="hidden md:flex gap-8 text-xl uppercase tracking-widest tech-font">
+            <a href="index.html" title="Home" class="hover-trigger hover:text-cyan-400 transition-colors"><i class="fas fa-home"></i></a>
+            <a href="index.html#interests" title="Nexus" class="hover-trigger hover:text-cyan-400 transition-colors"><i class="fas fa-brain"></i></a>
+            <a href="index.html#education" title="Launch Pad" class="hover-trigger hover:text-cyan-400 transition-colors"><i class="fas fa-graduation-cap"></i></a>
+            <a href="index.html#experience" title="Trajectory" class="hover-trigger hover:text-cyan-400 transition-colors"><i class="fas fa-route"></i></a>
+            <a href="about.html" title="About Me" class="hover-trigger text-cyan-400 transition-colors"><i class="fas fa-user-astronaut"></i></a>
+            <a href="index.html#contact" title="Contact" class="hover-trigger hover:text-cyan-400 transition-colors"><i class="fas fa-satellite-dish"></i></a>
+        </div>
+        <button id="menu-btn" class="md:hidden text-2xl hover-trigger"><i class="fas fa-bars"></i></button>
+    </nav>
+
+    <main class="relative z-10 pt-32 pb-20 px-6 md:px-20">
+        <div class="max-w-7xl mx-auto">
+            
+            <!-- MAIN BENTO GRID CONTAINER -->
+            <div class="bento-grid">
+                
+                <!-- LEFT COLUMN: Profile Card (Matching Purple Card shape) -->
+                <div class="profile-card card-bg-purple group">
+                    <div class="scan-line"></div>
+                    
+                    <!-- Top Section -->
+                    <div class="p-8 pb-0 relative z-10">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="tech-font text-[0.6rem] tracking-widest text-purple-300">ID: AK-15</span>
+                            <div class="w-16 h-16 rounded-full border border-purple-400/30 flex items-center justify-center rotating-badge bg-black/20 backdrop-blur-md">
+                                <svg viewBox="0 0 100 100" class="w-full h-full p-1 animate-spin-slow">
+                                    <path id="curve" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent"/>
+                                    <text width="500">
+                                        <textPath xlink:href="#curve" class="text-[10px] fill-purple-200 font-mono tracking-widest">
+                                            • DESIGN • CODE • SPACE •
+                                        </textPath>
+                                    </text>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- Profile Image Container with 3D Pop-out Effect -->
+                        <div class="relative w-48 h-48 mx-auto mt-12 mb-8 group/image">
+                            <!-- Background Rings (The Portal) -->
+                            <div class="absolute inset-0 rounded-full border-2 border-purple-500/50 bg-purple-500/10 backdrop-blur-sm animate-pulse"></div>
+                            <div class="absolute -inset-4 rounded-full border border-dashed border-purple-300/30 animate-[spin_10s_linear_infinite]"></div>
+                            
+                            <!-- 3D Pop-out Image -->
+                            <!-- Sized larger than container (w-64 vs w-48) and positioned to align bottom, letting head pop top -->
+                            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-64 h-64 z-20 pointer-events-none transition-transform duration-500 ease-out group-hover/image:scale-110 group-hover/image:-translate-y-4">
+                                <img src="https://i.ibb.co/5xzZyg8r/unnamed-removebg-preview.png" 
+                                     alt="Profile" 
+                                     class="w-full h-full object-contain drop-shadow-[0_20px_30px_rgba(147,51,234,0.4)]">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Section -->
+                    <div class="p-8 pt-0 mt-auto relative z-10">
+                        <p class="text-4xl font-light text-purple-200 brand-font leading-none mb-1 opacity-70">I'm,</p>
+                        <h2 class="text-6xl font-bold text-white brand-font leading-tight mb-6">Abhiram<br>Krishna</h2>
+                        
+                        <div class="border-t border-purple-500/30 pt-6">
+                            <a href="mailto:abhiramkrish8@gmail.com" class="flex items-center gap-3 group/link">
+                                <div class="w-10 h-10 rounded-full bg-white text-purple-900 flex items-center justify-center group-hover/link:scale-110 transition-transform">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <span class="tech-font text-xs text-purple-200 group-hover/link:text-white transition-colors">abhiramkrishna15@gmail.com</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: Content Area -->
+                <div class="content-area">
+                    
+                    <!-- Header -->
+                    <div class="header-row">
+                        <h1 class="text-5xl md:text-8xl font-bold brand-font tracking-tight text-white">THE OPERATOR</h1>
+                    </div>
+
+                    <!-- Middle Grid (2/3 + 1/3) -->
+                    <div class="grid-middle">
+                        
+                        <!-- Origin Story (Replaces Flamingo Card) -->
+                        <div class="bento-card card-bg-dark flex flex-col justify-center relative group">
+                            <div class="absolute top-4 right-4 flex gap-2">
+                                <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                                <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 brand-font text-cyan-400">Origin Story</h3>
+                            <p class="text-gray-300 leading-relaxed text-sm md:text-lg font-light">
+                               My Voyage continues to an endless point to time. When the conjection of the world of commerce and the world of science meets at the nexus point. 
+                                <br><br>
+                                <span class="text-white font-normal">Mission:</span> Bridge the Gap between Economical world and the scientific world together
+                            </p>
+                            <i class="fas fa-rocket absolute bottom-4 right-4 text-6xl text-cyan-500/10 group-hover:scale-110 transition-transform duration-500"></i>
+                        </div>
+
+                        <!-- Side Stack (Replaces Small Square Cards) -->
+                        <div class="flex flex-col gap-6">
+                            <!-- Philosophy -->
+                            <div class="bento-card card-bg-green flex-1 flex flex-col justify-center relative">
+                                <div class="absolute top-4 right-4 text-green-300 opacity-50">
+                                    <i class="fas fa-quote-right"></i>
+                                </div>
+                                <div class="text-3xl font-bold text-white mb-1">XP</div>
+                                <p class="text-xs text-green-100 font-light leading-snug">"A user interface is like a joke. If you have to explain it, it's not that good."</p>
+                            </div>
+
+                            <!-- Objective -->
+                            <div class="bento-card card-bg-purple flex-1 flex flex-col justify-center relative">
+                                <div class="absolute top-4 right-4 text-purple-300 opacity-50">
+                                    <i class="fas fa-bullseye"></i>
+                                </div>
+                                <div class="text-3xl font-bold text-white mb-1">Lvl. 99</div>
+                                <p class="text-xs text-purple-100 font-light leading-snug">Accelerate the transition to a sci-fi future through immersive web.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Grid (1/3 + 2/3) -->
+                    <div class="grid-bottom">
+                        
+                        <!-- Status (Replaces Apple Logo Card) -->
+                        <div class="bento-card bg-gray-800 flex flex-col items-center justify-center text-center">
+                            <i class="fas fa-satellite-dish text-4xl text-gray-400 mb-4 animate-pulse"></i>
+                            <h4 class="text-gray-500 text-xs tech-font tracking-widest mb-1">STATUS</h4>
+                            <p class="text-white font-bold">Building @ Al Midmar</p>
+                        </div>
+
+                        <!-- Arsenal (Replaces Wide Orange Card) -->
+                        <div class="bento-card card-bg-orange flex flex-col justify-center relative">
+                            <div class="absolute top-4 right-4 text-orange-300 opacity-50">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <h3 class="text-4xl font-bold text-white mb-1">Arsenal</h3>
+                            <p class="text-orange-100 text-sm mb-6">Standard Issue Equipment</p>
+                            
+                            <div class="flex flex-wrap gap-4">
+                                <div class="px-3 py-1 bg-white/10 rounded-full backdrop-blur-sm border border-white/10 text-xs text-white tech-font flex items-center gap-2">
+                                    <i class="fab fa-figma"></i> Figma
+                                </div>
+                                <div class="px-3 py-1 bg-white/10 rounded-full backdrop-blur-sm border border-white/10 text-xs text-white tech-font flex items-center gap-2">
+                                    <i class="fas fa-cube"></i> Blender
+                                </div>
+                                <div class="px-3 py-1 bg-white/10 rounded-full backdrop-blur-sm border border-white/10 text-xs text-white tech-font flex items-center gap-2">
+                                    <i class="fas fa-brain"></i> AI Models
+                                </div>
+                                <div class="px-3 py-1 bg-white/10 rounded-full backdrop-blur-sm border border-white/10 text-xs text-white tech-font flex items-center gap-2">
+                                    <i class="fas fa-image"></i> Photoshop
+                                </div>
+                                <div class="px-3 py-1 bg-white/10 rounded-full backdrop-blur-sm border border-white/10 text-xs text-white tech-font flex items-center gap-2">
+                                    <i class="fas fa-layer-group"></i> Adobe XD
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <footer id="contact" class="py-12 text-center border-t border-white/5 mt-12">
+            <h2 class="text-2xl font-bold brand-font mb-8">ESTABLISH UPLINK</h2>
+            <div class="terminal-container w-full max-w-2xl mx-auto">
+                <!-- Added missing status display element to fix JS error -->
+                <div class="status-display" id="terminal-status">SYSTEM STANDBY // AWAITING INPUT</div>
+                
+                <div class="terminal-grid">
+                    <a href="mailto:abhiramkrish8@gmail.com" class="signal-card group hover-trigger" style="--signal-color: #ff0055; --signal-glow: rgba(255, 0, 85, 0.4);" onmouseenter="updateStatus('INITIATING SECURE MAIL PROTOCOL')" onmouseleave="resetStatus()">
+                        <div class="text-left">
+                            <div class="text-xs text-gray-500 tech-font">CONNECT</div>
+                            <div class="font-bold">EMAIL</div>
+                        </div>
+                        <i class="fas fa-envelope signal-icon"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/abhiramkrishna1/" target="_blank" class="signal-card group hover-trigger" style="--signal-color: #0077b5; --signal-glow: rgba(0, 119, 181, 0.4);">
+                        <div class="text-left">
+                            <div class="text-xs text-gray-500 tech-font">LINKEDIN</div>
+                            <div class="font-bold">PROFILE</div>
+                        </div>
+                        <i class="fab fa-linkedin-in signal-icon"></i>
+                    </a>
+                    <a href="https://x.com/abhiramkriss" target="_blank" class="signal-card group hover-trigger" style="--signal-color: #ffffff; --signal-glow: rgba(255, 255, 255, 0.4);" onmouseenter="updateStatus('DECODING SHORT-WAVE TRANSMISSIONS')" onmouseleave="resetStatus()">
+                        <div class="text-left">
+                            <div class="text-xs text-gray-500 tech-font">TWITTER / X</div>
+                            <div class="font-bold">FEED</div>
+                        </div>
+                        <i class="fab fa-twitter signal-icon"></i>
+                    </a>
+                    <a href="https://github.com/abhiramkrishna" target="_blank" class="signal-card group hover-trigger" style="--signal-color: #2dba4e; --signal-glow: rgba(45, 186, 78, 0.4);" onmouseenter="updateStatus('INSPECTING SOURCE CODE REPOSITORIES')" onmouseleave="resetStatus()">
+                        <div class="text-left">
+                            <div class="text-xs text-gray-500 tech-font">GITHUB</div>
+                            <div class="font-bold">CODEBASE</div>
+                        </div>
+                        <i class="fab fa-github signal-icon"></i>
+                    </a>
+                    <a href="https://www.instagram.com/_abhiram__krishna_/" target="_blank" class="signal-card group hover-trigger" style="--signal-color: #d62976; --signal-glow: rgba(214, 41, 118, 0.4);" onmouseenter="updateStatus('LOADING VISUAL LOGS')" onmouseleave="resetStatus()">
+                        <div class="text-left">
+                            <div class="text-xs text-gray-500 tech-font">INSTAGRAM</div>
+                            <div class="font-bold">PAGE</div>
+                        </div>
+                        <i class="fab fa-instagram signal-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        const cursor = document.getElementById('cursor-singularity');
+        const hoverTriggers = document.querySelectorAll('.hover-trigger');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mousedown', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(0.8)';
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+
+        hoverTriggers.forEach(link => {
+            link.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            link.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+        const menuBtn = document.getElementById('menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuBtn && mobileMenu && closeMenuBtn) {
+            menuBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+            closeMenuBtn.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        }
+
+        function updateStatus(text) {
+            const statusEl = document.getElementById('terminal-status');
+            statusEl.innerText = text + '...';
+            statusEl.style.textShadow = "0 0 15px rgba(0, 229, 255, 0.8)";
+            statusEl.style.color = "#fff";
+        }
+
+        function resetStatus() {
+            const statusEl = document.getElementById('terminal-status');
+            statusEl.innerText = 'SYSTEM STANDBY // AWAITING INPUT';
+            statusEl.style.textShadow = "0 0 10px rgba(0, 229, 255, 0.5)";
+            statusEl.style.color = "#00e5ff";
+        }
+
+        const initBackgroundScene = () => {
+            const container = document.getElementById('canvas-container');
+            if(!container) return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+            camera.position.z = 1000;
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            const particleGeo = new THREE.BufferGeometry();
+            const particleCount = 1500;
+            const posArray = new Float32Array(particleCount * 3);
+
+            for(let i = 0; i < particleCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 4000;
+            }
+
+            particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const particleMat = new THREE.PointsMaterial({
+                size: 2,
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.6,
+            });
+            const particles = new THREE.Points(particleGeo, particleMat);
+            scene.add(particles);
+
+            let mouseX = 0;
+            let mouseY = 0;
+            const windowHalfX = window.innerWidth / 2;
+            const windowHalfY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX - windowHalfX);
+                mouseY = (event.clientY - windowHalfY);
+            });
+
+            const clock = new THREE.Clock();
+
+            const animate = () => {
+                const elapsedTime = clock.getElapsedTime();
+                particles.rotation.y = elapsedTime * 0.05;
+                particles.rotation.x = mouseY * 0.0001;
+                camera.position.z = 1000 + (mouseY * 0.1);
+                renderer.render(scene, camera);
+                requestAnimationFrame(animate);
+            };
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        };
+
+        window.addEventListener('load', () => {
+            initBackgroundScene();
+        });
+    </script>
+</body>
+</html>
