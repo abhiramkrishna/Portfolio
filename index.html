@@ -142,39 +142,6 @@
                 transform: none !important;
             }
             
-            .interests-carousel {
-                overflow: hidden;
-                perspective: 800px;
-                padding-top: 20px;
-                padding-bottom: 20px;
-            }
-
-            .carousel-track {
-                animation: mobileScroll 25s linear infinite; /* Left to right loop */
-                width: max-content;
-                padding-left: 1rem;
-                display: flex;
-                transform-style: preserve-3d;
-            }
-            
-            .interest-card {
-                flex: 0 0 85vw !important; 
-                margin-right: 1.5rem;
-                transform: rotateY(15deg) translateZ(-10px);
-                box-shadow: -10px 10px 20px rgba(0,0,0,0.5);
-                border: 1px solid rgba(255, 255, 255, 0.15);
-                background: rgba(10, 10, 15, 0.95);
-                height: auto; /* Fit container to text */
-                min-height: 450px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-            }
-
-            .carousel-nav {
-                display: none !important; /* Remove dots */
-            }
-
             .outline-text {
                 opacity: 0.8 !important; 
                 -webkit-text-stroke: 1px rgba(255,255,255,0.6) !important;
@@ -182,10 +149,195 @@
             }
         }
 
-        @keyframes mobileScroll {
-            0% { transform: translateX(0) rotateX(0deg); }
-            100% { transform: translateX(calc(-100% + 85vw)); }
+        /* --- ACCORDION CARD STYLES --- */
+        .interests-carousel {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 0;
         }
+
+        .carousel-track {
+            display: flex;
+            width: 100%;
+            gap: 1rem;
+            height: 500px; /* Fixed height for desktop */
+        }
+
+        .interest-card {
+            position: relative;
+            background: rgba(15, 15, 15, 0.8);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            
+            /* Flex properties for accordion */
+            flex: 1; /* Collapsed state width */
+            transition: flex 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 1.5rem;
+            min-width: 80px; /* Increased slightly for bigger icons */
+        }
+
+        /* CHANGED: Use hover instead of active class */
+        .interest-card:hover {
+            flex: 5; /* Expanded state width */
+            background: rgba(20, 20, 30, 0.95);
+            border-color: var(--card-color);
+            box-shadow: 0 0 40px var(--card-glow);
+        }
+
+        /* Content Visibility Control */
+        .interest-card .card-content-wrapper {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap; /* Prevent wrapping in transition */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        /* CHANGED: Use hover instead of active class */
+        .interest-card:hover .card-content-wrapper {
+            opacity: 1;
+            transition-delay: 0.3s;
+            white-space: normal;
+        }
+
+        .card-icon-wrapper {
+            width: 100px; /* Increased from 60px */
+            height: 100px; /* Increased from 60px */
+            border-radius: 50%;
+            background: var(--card-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 20px var(--card-glow);
+            transition: all 0.4s ease;
+            
+            /* Icon stays visible even when collapsed, centered */
+            position: absolute;
+            top: 20%; /* Adjusted top position */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        /* CHANGED: Use hover instead of active class */
+        .interest-card:hover .card-icon-wrapper {
+            position: relative;
+            top: auto;
+            left: auto;
+            transform: none;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 2rem;
+        }
+
+        .card-icon {
+            font-size: 3rem; /* Increased from 1.5rem */
+            color: #000;
+        }
+        /* CHANGED: Use hover instead of active class */
+        .interest-card:hover .card-icon {
+            font-size: 2.5rem;
+        }
+
+        .card-bg-number {
+            position: absolute;
+            font-size: 1.8rem; /* Adjusted size for text */
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.4); /* More visible in collapsed state */
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-90deg); /* Rotated 90 degrees left */
+            white-space: nowrap;
+            pointer-events: none;
+            font-family: 'Orbitron', sans-serif;
+            transition: all 0.5s;
+            letter-spacing: 2px;
+            width: max-content;
+        }
+
+        /* CHANGED: Use hover instead of active class */
+        .interest-card:hover .card-bg-number {
+            font-size: 6rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg); /* Reset rotation on expand */
+            color: rgba(255, 255, 255, 0.03); /* Fade out to background style */
+            z-index: 0;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            font-family: 'Syne', sans-serif;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-quote {
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-track {
+                height: 450px;
+                gap: 5px;
+            }
+            .interest-card {
+                padding: 1rem;
+                min-width: 40px;
+            }
+            .card-title {
+                font-size: 1.5rem;
+            }
+            .card-quote {
+                font-size: 0.8rem;
+                margin-top: 1rem;
+                padding-top: 1rem;
+            }
+            /* CHANGED: Use hover instead of active class */
+            .interest-card:hover {
+                flex: 8; /* Even wider active card on mobile for space */
+            }
+            .card-bg-number {
+                font-size: 1rem; /* Smaller on mobile */
+            }
+        }
+
+        .carousel-nav {
+            display: none; /* Hide dots as requested */
+        }
+
+        /* --- END ACCORDION STYLES --- */
 
         .hero-title {
             font-size: clamp(2rem, 5.5vw, 5rem);
@@ -212,17 +364,19 @@
             display: block;
             margin-top: 0.2em;
             font-size: 1.1em;
-            color: rgba(255, 255, 255, 0.1); 
-            background-image: radial-gradient(
-                circle 150px at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-                #ffffff 0%,
-                #888888 25%,
-                rgba(255, 255, 255, 0.1) 60%
-            );
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            will-change: background-image;
-            transition: opacity 0.3s;
+            
+            /* Updated to Glow Theme */
+            color: rgba(255, 255, 255, 0.3); /* Dim initial state */
+            transition: all 0.5s ease;
+        }
+
+        .hero-name:hover {
+            color: #ffffff;
+            text-shadow: 
+                0 0 10px rgba(0, 229, 255, 0.8),
+                0 0 20px rgba(0, 229, 255, 0.6),
+                0 0 40px rgba(0, 229, 255, 0.4);
+            transform: scale(1.02);
         }
 
         .outline-text {
@@ -334,161 +488,6 @@
         .logo-container:hover .logo-line-2 {
             transform: translateX(5px);
             color: #00e5ff;
-        }
-
-        .interests-area {
-            min-height: 100vh;
-            position: relative;
-            padding: 4rem 1.5rem;
-        }
-
-        .interests-carousel {
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .carousel-track {
-            display: flex;
-            gap: 2rem;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            padding: 2rem 0;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        .carousel-track::-webkit-scrollbar {
-            display: none;
-        }
-
-        .interest-card {
-            flex: 0 0 400px;
-            scroll-snap-align: center;
-            background: rgba(15, 15, 15, 0.8);
-            border-radius: 24px;
-            padding: 3rem;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: grab;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            backdrop-filter: blur(20px);
-        }
-
-        .interest-card:active {
-            cursor: grabbing;
-        }
-
-        .interest-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--card-color);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .interest-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .interest-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: var(--card-color);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px var(--card-glow);
-        }
-
-        .card-icon-wrapper {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: var(--card-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
-            position: relative;
-            box-shadow: 0 0 30px var(--card-glow);
-            transition: all 0.4s ease;
-        }
-
-        .interest-card:hover .card-icon-wrapper {
-            transform: rotate(360deg) scale(1.1);
-            box-shadow: 0 0 50px var(--card-glow);
-        }
-
-        .card-icon {
-            font-size: 3rem;
-            color: #000;
-        }
-
-        .card-bg-number {
-            position: absolute;
-            font-size: 12rem;
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.02);
-            top: -20px;
-            right: -20px;
-            line-height: 1;
-            pointer-events: none;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .card-title {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            font-family: 'Syne', sans-serif;
-        }
-
-        .card-subtitle {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-            font-weight: 300;
-        }
-
-        .card-quote {
-            font-style: italic;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .carousel-nav {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-
-        .nav-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .nav-dot.active {
-            background: #00e5ff;
-            transform: scale(1.3);
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
-        }
-
-        .nav-dot:hover {
-            background: rgba(255, 255, 255, 0.5);
         }
 
         .section-header {
@@ -720,6 +719,7 @@
             <a href="#interests" class="mobile-link hover:text-cyan-400">Nexus</a>
             <a href="#education" class="mobile-link hover:text-cyan-400">Launch Pad</a>
             <a href="#experience" class="mobile-link hover:text-cyan-400">Trajectory</a>
+            <a href="about.html" class="mobile-link hover:text-cyan-400">About Me</a>
             <a href="#contact" class="mobile-link hover:text-cyan-400">Contact</a>
         </div>
     </div>
@@ -736,12 +736,13 @@
             <span class="logo-text logo-line-1">ABHIRAM</span>
             <span class="logo-text logo-line-2">KRISHNA</span>
         </a>
-        <div class="hidden md:flex gap-8 text-sm uppercase tracking-widest tech-font">
-            <a href="#about" class="hover-trigger hover:text-cyan-400 transition-colors">Manifesto</a>
-            <a href="#interests" class="hover-trigger hover:text-cyan-400 transition-colors">Nexus</a>
-            <a href="#education" class="hover-trigger hover:text-cyan-400 transition-colors">Launch Pad</a>
-            <a href="#experience" class="hover-trigger hover:text-cyan-400 transition-colors">Trajectory</a>
-            <a href="#contact" class="hover-trigger hover:text-cyan-400 transition-colors">Contact</a>
+        <div class="hidden md:flex gap-8 text-xl uppercase tracking-widest tech-font">
+            <a href="#about" title="Manifesto" class="hover-trigger hover:text-cyan-400 transition-colors"><i class="fas fa-file-contract"></i></a>
+            <a href="#interests" title="Nexus" class="hover-trigger hover:text-cyan-400 transition-colors"><i class="fas fa-brain"></i></a>
+            <a href="#education" title="Launch Pad" class="hover-trigger hover:text-cyan-400 transition-colors"><i class="fas fa-graduation-cap"></i></a>
+            <a href="#experience" title="Trajectory" class="hover-trigger hover:text-cyan-400 transition-colors"><i class="fas fa-route"></i></a>
+            <a href="about.html" title="About Me" class="hover-trigger hover:text-cyan-400 transition-colors"><i class="fas fa-user-astronaut"></i></a>
+            <a href="#contact" title="Contact" class="hover-trigger hover:text-cyan-400 transition-colors"><i class="fas fa-satellite-dish"></i></a>
         </div>
         <button id="menu-btn" class="md:hidden text-2xl hover-trigger"><i class="fas fa-bars"></i></button>
     </nav>
@@ -764,7 +765,6 @@
                         <span class="hero-name hover-trigger" id="hero-name-text">ABHIRAM KRISHNA.</span>
                     </h1>
                     
-                    <!-- Desktop Button -->
                     <div class="hero-element hidden md:flex flex-col md:flex-row gap-8 items-start md:items-center mt-8 relative z-20" style="transition-delay: 0.2s;">
                         <a href="#interests" class="glass-panel p-4 rounded-full flex items-center gap-4 hover-trigger cursor-pointer group transition-transform hover:scale-105">
                             <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-black">
@@ -774,7 +774,6 @@
                         </a>
                     </div>
 
-                    <!-- Mobile Scroll Indicator -->
                     <div class="hero-element flex md:hidden flex-col items-center mt-12 relative z-20 animate-bounce" style="transition-delay: 0.2s;">
                         <span class="text-xs font-bold tracking-[0.2em] text-cyan-400 mb-2 brand-font">SCROLL TO EXPLORE</span>
                         <div class="flex flex-col -space-y-4">
@@ -847,63 +846,71 @@
                 <div class="carousel-track" id="carousel-track">
                     
                     <div class="interest-card hover-trigger" style="--card-color: #3b82f6; --card-glow: rgba(59, 130, 246, 0.4);">
-                        <div class="card-bg-number">01</div>
+                        <div class="card-bg-number">AI</div>
                         <div class="card-icon-wrapper">
                             <i class="fas fa-brain card-icon"></i>
                         </div>
-                        <h3 class="card-title">Artificial Intelligence</h3>
-                        <p class="card-subtitle">Neural networks & Generative Design</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-blue-500/20 rounded-full text-xs">Machine Learning</span>
-                            <span class="px-3 py-1 bg-blue-500/20 rounded-full text-xs">Deep Learning</span>
-                            <span class="px-3 py-1 bg-blue-500/20 rounded-full text-xs">Computer Vision</span>
+                        <div class="card-content-wrapper">
+                            <h3 class="card-title">Artificial Intelligence</h3>
+                            <p class="card-subtitle">Neural networks & Generative Design</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-blue-500/20 rounded-full text-xs">Machine Learning</span>
+                                <span class="px-3 py-1 bg-blue-500/20 rounded-full text-xs">Deep Learning</span>
+                                <span class="px-3 py-1 bg-blue-500/20 rounded-full text-xs">Computer Vision</span>
+                            </div>
+                            <p class="card-quote">"Either lose track or stay on track with sleepless nights and dark circles"</p>
                         </div>
-                        <p class="card-quote">"Either lose track or stay on track with sleepless nights and dark circles"</p>
                     </div>
 
                     <div class="interest-card hover-trigger" style="--card-color: #f97316; --card-glow: rgba(249, 115, 22, 0.4);">
-                        <div class="card-bg-number">02</div>
+                        <div class="card-bg-number">SPACE</div>
                         <div class="card-icon-wrapper">
                             <i class="fas fa-rocket card-icon"></i>
                         </div>
-                        <h3 class="card-title">Space & Rocketry</h3>
-                        <p class="card-subtitle">Interplanetary Logistics & Propulsion</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-orange-500/20 rounded-full text-xs">SpaceX</span>
-                            <span class="px-3 py-1 bg-orange-500/20 rounded-full text-xs">Orbital Mechanics</span>
-                            <span class="px-3 py-1 bg-orange-500/20 rounded-full text-xs">Mars Colony</span>
+                        <div class="card-content-wrapper">
+                            <h3 class="card-title">Space & Rocketry</h3>
+                            <p class="card-subtitle">Interplanetary Logistics & Propulsion</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-orange-500/20 rounded-full text-xs">SpaceX</span>
+                                <span class="px-3 py-1 bg-orange-500/20 rounded-full text-xs">Orbital Mechanics</span>
+                                <span class="px-3 py-1 bg-orange-500/20 rounded-full text-xs">Mars Colony</span>
+                            </div>
+                            <p class="card-quote">"Heard that they are building a hotel on the Moon. Hmmm… Ahm, so when are you going to take me?"</p>
                         </div>
-                        <p class="card-quote">"Heard that they are building a hotel on the Moon. Hmmm… Ahm, so when are you going to take me?"</p>
                     </div>
 
                     <div class="interest-card hover-trigger" style="--card-color: #10b981; --card-glow: rgba(16, 185, 129, 0.4);">
-                        <div class="card-bg-number">03</div>
+                        <div class="card-bg-number">URBAN</div>
                         <div class="card-icon-wrapper">
                             <i class="fas fa-city card-icon"></i>
                         </div>
-                        <h3 class="card-title">Urbanization</h3>
-                        <p class="card-subtitle">Smart Cities & Sustainable Infrastructure</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-green-500/20 rounded-full text-xs">IoT Systems</span>
-                            <span class="px-3 py-1 bg-green-500/20 rounded-full text-xs">Urban Planning</span>
-                            <span class="px-3 py-1 bg-green-500/20 rounded-full text-xs">Sustainability</span>
+                        <div class="card-content-wrapper">
+                            <h3 class="card-title">Urbanization</h3>
+                            <p class="card-subtitle">Smart Cities & Sustainable Infrastructure</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-green-500/20 rounded-full text-xs">IoT Systems</span>
+                                <span class="px-3 py-1 bg-green-500/20 rounded-full text-xs">Urban Planning</span>
+                                <span class="px-3 py-1 bg-green-500/20 rounded-full text-xs">Sustainability</span>
+                            </div>
+                            <p class="card-quote">"Roads have feelings too. They control and hold everything up until they cannot take it anymore and tear down with pores"</p>
                         </div>
-                        <p class="card-quote">"Roads have feelings too. They control and hold everything up until they cannot take it anymore and tear down with pores"</p>
                     </div>
 
                     <div class="interest-card hover-trigger" style="--card-color: #ef4444; --card-glow: rgba(239, 68, 68, 0.4);">
-                        <div class="card-bg-number">04</div>
+                        <div class="card-bg-number">AUTO</div>
                         <div class="card-icon-wrapper">
                             <i class="fas fa-car-side card-icon"></i>
                         </div>
-                        <h3 class="card-title">Automotive</h3>
-                        <p class="card-subtitle">EV Platforms & Autonomous Mobility</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-red-500/20 rounded-full text-xs">Electric Vehicles</span>
-                            <span class="px-3 py-1 bg-red-500/20 rounded-full text-xs">Self-Driving</span>
-                            <span class="px-3 py-1 bg-red-500/20 rounded-full text-xs">Vehicle Design</span>
+                        <div class="card-content-wrapper">
+                            <h3 class="card-title">Automotive</h3>
+                            <p class="card-subtitle">EV Platforms & Autonomous Mobility</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-red-500/20 rounded-full text-xs">Electric Vehicles</span>
+                                <span class="px-3 py-1 bg-red-500/20 rounded-full text-xs">Self-Driving</span>
+                                <span class="px-3 py-1 bg-red-500/20 rounded-full text-xs">Vehicle Design</span>
+                            </div>
+                            <p class="card-quote">"Electric vehicles are shit. End of the conversation!!!"</p>
                         </div>
-                        <p class="card-quote">"Gas engines turn fire into motion and somehow into joy"</p>
                     </div>
 
                 </div>
@@ -960,7 +967,7 @@
                     <span class="timeline-year" style="color: #00ff88;">CURRENT</span>
                     <h3 class="timeline-role">Designer</h3>
                     <p class="timeline-org">Al Midmar Adv. Design</p>
-                    <p class="text-gray-400 text-sm">Current trajectory. Architecting high-performance visuals</p>
+                    <p class="text-gray-400 text-sm">Current trajectory. Architecting high-performance visuals with Vanilla JS + Three.js.</p>
                 </div>
             </div>
         </section>
@@ -976,7 +983,7 @@
                 <div class="status-display" id="terminal-status">SYSTEM STANDBY // AWAITING INPUT</div>
 
                 <div class="terminal-grid">
-                    <a href="mailto:abhiramkrishna15@gmail.com" class="signal-card group hover-trigger" style="--signal-color: #ff0055; --signal-glow: rgba(255, 0, 85, 0.4);" onmouseenter="updateStatus('INITIATING SECURE MAIL PROTOCOL')" onmouseleave="resetStatus()">
+                    <a href="mailto:abhiramkrish8@gmail.com" class="signal-card group hover-trigger" style="--signal-color: #ff0055; --signal-glow: rgba(255, 0, 85, 0.4);" onmouseenter="updateStatus('INITIATING SECURE MAIL PROTOCOL')" onmouseleave="resetStatus()">
                         <div class="text-left">
                             <div class="text-xs text-gray-500 tech-font">CONNECT</div>
                             <div class="font-bold">EMAIL</div>
@@ -1076,86 +1083,17 @@
             }
         });
 
-        const carouselTrack = document.getElementById('carousel-track');
-        const navDots = document.querySelectorAll('.nav-dot');
-        const interestCards = document.querySelectorAll('.interest-card');
-        
-        let isDragging = false;
-        let startPos = 0;
-        let currentTranslate = 0;
-        let prevTranslate = 0;
-        let currentIndex = 0;
+        const menuBtn = document.getElementById('menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
 
-        if (carouselTrack) {
-            carouselTrack.addEventListener('scroll', () => {
-                const scrollLeft = carouselTrack.scrollLeft;
-                const cardWidth = interestCards[0].offsetWidth + 32; 
-                const newIndex = Math.round(scrollLeft / cardWidth);
-                
-                if (newIndex !== currentIndex) {
-                    currentIndex = newIndex;
-                    updateNavDots();
-                }
+        if (menuBtn && mobileMenu && closeMenuBtn) {
+            menuBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+            closeMenuBtn.addEventListener('click', () => mobileMenu.classList.remove('open'));
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => mobileMenu.classList.remove('open'));
             });
-
-            const isMobile = window.innerWidth <= 768;
-
-            if (!isMobile) {
-                carouselTrack.addEventListener('mousedown', dragStart);
-                carouselTrack.addEventListener('touchstart', dragStart);
-                carouselTrack.addEventListener('mouseup', dragEnd);
-                carouselTrack.addEventListener('touchend', dragEnd);
-                carouselTrack.addEventListener('mousemove', drag);
-                carouselTrack.addEventListener('touchmove', drag);
-                carouselTrack.addEventListener('mouseleave', dragEnd);
-            }
-        }
-
-        navDots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentIndex = index;
-                const cardWidth = interestCards[0].offsetWidth + 32;
-                if(carouselTrack) {
-                    carouselTrack.scrollTo({
-                        left: cardWidth * index,
-                        behavior: 'smooth'
-                    });
-                }
-                updateNavDots();
-            });
-        });
-
-        function updateNavDots() {
-            navDots.forEach((dot, index) => {
-                if (index === currentIndex) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-        }
-
-        function dragStart(e) {
-            isDragging = true;
-            startPos = e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
-            carouselTrack.style.cursor = 'grabbing';
-        }
-
-        function drag(e) {
-            if (!isDragging) return;
-            const currentPosition = e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
-            const diff = currentPosition - startPos;
-            
-            if (Math.abs(diff) > 5) {
-                e.preventDefault();
-                carouselTrack.scrollLeft -= diff;
-                startPos = currentPosition;
-            }
-        }
-
-        function dragEnd() {
-            isDragging = false;
-            carouselTrack.style.cursor = 'grab';
         }
 
         const initBackgroundScene = () => {
@@ -1393,19 +1331,6 @@
             statusEl.innerText = 'SYSTEM STANDBY // AWAITING INPUT';
             statusEl.style.textShadow = "0 0 10px rgba(0, 229, 255, 0.5)";
             statusEl.style.color = "#00e5ff";
-        }
-
-        const menuBtn = document.getElementById('menu-btn');
-        const closeMenuBtn = document.getElementById('close-menu');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
-
-        if (menuBtn && mobileMenu && closeMenuBtn) {
-            menuBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
-            closeMenuBtn.addEventListener('click', () => mobileMenu.classList.remove('open'));
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', () => mobileMenu.classList.remove('open'));
-            });
         }
 
         window.addEventListener('load', () => {
