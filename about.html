@@ -83,6 +83,13 @@
             body {
                 cursor: auto;
             }
+            /* MOBILE FIX: Remove 3D tilt for Establish Uplink footer to ensure readability */
+            .terminal-container {
+                perspective: none !important;
+            }
+            .terminal-grid {
+                transform: none !important;
+            }
         }
 
         .glass-panel {
@@ -200,7 +207,7 @@
             .terminal-grid { grid-template-columns: repeat(3, 1fr); }
         }
 
-        /* --- BENTO GRID STYLES MATCHING REFERENCE --- */
+        /* --- BENTO GRID STYLES --- */
         .bento-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -209,16 +216,15 @@
 
         @media (min-width: 1024px) {
             .bento-grid {
-                grid-template-columns: 25% 1fr; /* Exact proportions from reference (Left bar, Right content) */
+                grid-template-columns: 25% 1fr;
                 grid-template-rows: auto;
             }
         }
 
-        /* Left Profile Card */
         .profile-card {
             background: rgba(20, 20, 35, 0.6);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 2rem; /* Large rounded corners from ref */
+            border-radius: 2rem;
             position: relative;
             overflow: hidden;
             display: flex;
@@ -228,7 +234,6 @@
             min-height: 600px;
         }
 
-        /* Right Content Area */
         .content-area {
             display: flex;
             flex-direction: column;
@@ -248,7 +253,7 @@
         }
         @media (min-width: 768px) {
             .grid-middle {
-                grid-template-columns: 2fr 1fr; /* 2/3 Wide card, 1/3 Small stack */
+                grid-template-columns: 2fr 1fr;
             }
         }
 
@@ -259,12 +264,12 @@
         }
         @media (min-width: 768px) {
             .grid-bottom {
-                grid-template-columns: 1fr 2fr; /* 1/3 Small card, 2/3 Wide card */
+                grid-template-columns: 1fr 2fr;
             }
         }
 
         .bento-card {
-            border-radius: 2rem; /* Consistent large radius */
+            border-radius: 2rem;
             padding: 2rem;
             position: relative;
             overflow: hidden;
@@ -279,7 +284,6 @@
             z-index: 10;
         }
 
-        /* Colors based on theme but mapped to reference layout slots */
         .card-bg-purple { background: linear-gradient(135deg, rgba(88, 28, 135, 0.3), rgba(15, 23, 42, 0.6)); }
         .card-bg-cyan { background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(15, 23, 42, 0.6)); }
         .card-bg-green { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(15, 23, 42, 0.6)); }
@@ -353,14 +357,11 @@
     <main class="relative z-10 pt-32 pb-20 px-6 md:px-20">
         <div class="max-w-7xl mx-auto">
             
-            <!-- MAIN BENTO GRID CONTAINER -->
             <div class="bento-grid">
                 
-                <!-- LEFT COLUMN: Profile Card (Matching Purple Card shape) -->
                 <div class="profile-card card-bg-purple group">
                     <div class="scan-line"></div>
                     
-                    <!-- Top Section -->
                     <div class="p-8 pb-0 relative z-10">
                         <div class="flex justify-between items-start mb-4">
                             <span class="tech-font text-[0.6rem] tracking-widest text-purple-300">ID: AK-15</span>
@@ -376,23 +377,18 @@
                             </div>
                         </div>
                         
-                        <!-- Profile Image Container with 3D Pop-out Effect -->
                         <div class="relative w-48 h-48 mx-auto mt-12 mb-8 group/image">
-                            <!-- Background Rings (The Portal) -->
                             <div class="absolute inset-0 rounded-full border-2 border-purple-500/50 bg-purple-500/10 backdrop-blur-sm animate-pulse"></div>
                             <div class="absolute -inset-4 rounded-full border border-dashed border-purple-300/30 animate-[spin_10s_linear_infinite]"></div>
                             
-                            <!-- 3D Pop-out Image -->
-                            <!-- Sized larger than container (w-64 vs w-48) and positioned to align bottom, letting head pop top -->
                             <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-64 h-64 z-20 pointer-events-none transition-transform duration-500 ease-out group-hover/image:scale-110 group-hover/image:-translate-y-4">
-                                <img src="https://i.ibb.co/5xzZyg8r/unnamed-removebg-preview.png" 
+                                <img src="https://i.ibb.co/fdYQsqSB/Picsart-26-02-11-09-24-47-407.png" 
                                      alt="Profile" 
                                      class="w-full h-full object-contain drop-shadow-[0_20px_30px_rgba(147,51,234,0.4)]">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Bottom Section -->
                     <div class="p-8 pt-0 mt-auto relative z-10">
                         <p class="text-2xl font-light text-purple-200 brand-font leading-none mb-1 opacity-70">I'm,</p>
                         <h2 class="text-4xl font-bold text-white brand-font leading-tight mb-6">Abhiram<br>Krishna</h2>
@@ -408,18 +404,14 @@
                     </div>
                 </div>
 
-                <!-- RIGHT COLUMN: Content Area -->
                 <div class="content-area">
                     
-                    <!-- Header -->
                     <div class="header-row">
                         <h1 class="text-5xl md:text-8xl font-bold brand-font tracking-tight text-white">ITS ABOUT ME</h1>
                     </div>
 
-                    <!-- Middle Grid (2/3 + 1/3) -->
                     <div class="grid-middle">
                         
-                        <!-- Origin Story (Replaces Flamingo Card) -->
                         <div class="bento-card card-bg-dark flex flex-col justify-center relative group">
                             <div class="absolute top-4 right-4 flex gap-2">
                                 <div class="w-2 h-2 rounded-full bg-red-500"></div>
@@ -435,9 +427,7 @@
                             <i class="fas fa-rocket absolute bottom-4 right-4 text-6xl text-cyan-500/10 group-hover:scale-110 transition-transform duration-500"></i>
                         </div>
 
-                        <!-- Side Stack (Replaces Small Square Cards) -->
                         <div class="flex flex-col gap-6">
-                            <!-- Philosophy -->
                             <div class="bento-card card-bg-green flex-1 flex flex-col justify-center relative">
                                 <div class="absolute top-4 right-4 text-green-300 opacity-50">
                                     <i class="fas fa-quote-right"></i>
@@ -446,7 +436,6 @@
                                 <p class="text-xs text-green-100 font-light leading-snug">"A user interface is like a joke. If you have to explain it, it's not that good."</p>
                             </div>
 
-                            <!-- Objective -->
                             <div class="bento-card card-bg-purple flex-1 flex flex-col justify-center relative">
                                 <div class="absolute top-4 right-4 text-purple-300 opacity-50">
                                     <i class="fas fa-bullseye"></i>
@@ -457,17 +446,14 @@
                         </div>
                     </div>
 
-                    <!-- Bottom Grid (1/3 + 2/3) -->
                     <div class="grid-bottom">
                         
-                        <!-- Status (Replaces Apple Logo Card) -->
                         <div class="bento-card bg-gray-800 flex flex-col items-center justify-center text-center">
                             <i class="fas fa-satellite-dish text-4xl text-gray-400 mb-4 animate-pulse"></i>
                             <h4 class="text-gray-500 text-xs tech-font tracking-widest mb-1">CURRENT STATUS</h4>
                             <p class="text-white font-bold">Designing @ Al Midmar</p>
                         </div>
 
-                        <!-- Arsenal (Replaces Wide Orange Card) -->
                         <div class="bento-card card-bg-orange flex flex-col justify-center relative">
                             <div class="absolute top-4 right-4 text-orange-300 opacity-50">
                                 <i class="fas fa-tools"></i>
@@ -475,7 +461,6 @@
                             <h3 class="text-4xl font-bold text-white mb-1">Personal Preference Kit</h3>
                             <p class="text-orange-100 text-sm mb-6">Standard Issue Equipment</p>
                             
-                            <!-- Changed to Grid for perfect text alignment -->
                             <div class="grid grid-cols-3 gap-y-6 gap-x-2 w-full">
                                 
                                 <div class="flex flex-col items-center gap-2 group cursor-pointer">
@@ -487,7 +472,6 @@
 
                                 <div class="flex flex-col items-center gap-2 group cursor-pointer">
                                     <div class="h-8 flex items-center justify-center">
-                                        <!-- ILLUSTRATOR -->
                                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Adobe_Illustrator_CC_icon.svg/512px-Adobe_Illustrator_CC_icon.svg.png?20251029195730" alt="Illustrator" class="w-6 h-6 object-contain opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300">
                                     </div>
                                     <span class="text-[0.6rem] tech-font text-gray-500 tracking-wider">ILLUSTRATOR</span>
@@ -495,7 +479,6 @@
 
                                 <div class="flex flex-col items-center gap-2 group cursor-pointer">
                                     <div class="h-8 flex items-center justify-center">
-                                        <!-- BLENDER -->
                                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Blender_logo_no_text.svg/512px-Blender_logo_no_text.svg.png?20210507122249" alt="Blender" class="w-6 h-6 object-contain opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300">
                                     </div>
                                     <span class="text-[0.6rem] tech-font text-gray-500 tracking-wider">BLENDER</span>
@@ -510,7 +493,6 @@
 
                                 <div class="flex flex-col items-center gap-2 group cursor-pointer">
                                     <div class="h-8 flex items-center justify-center">
-                                        <!-- PHOTOSHOP -->
                                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Adobe_Photoshop_CC_icon.svg/512px-Adobe_Photoshop_CC_icon.svg.png?20200616073617" alt="Photoshop" class="w-6 h-6 object-contain opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300">
                                     </div>
                                     <span class="text-[0.6rem] tech-font text-gray-500 tracking-wider">PHOTOSHOP</span>
@@ -518,7 +500,6 @@
 
                                 <div class="flex flex-col items-center gap-2 group cursor-pointer">
                                     <div class="h-8 flex items-center justify-center">
-                                        <!-- ADOBE XD -->
                                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Adobe_XD_CC_icon.svg/512px-Adobe_XD_CC_icon.svg.png?20210729021535" alt="Adobe XD" class="w-6 h-6 object-contain opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300">
                                     </div>
                                     <span class="text-[0.6rem] tech-font text-gray-500 tracking-wider">XD</span>
@@ -533,20 +514,25 @@
 
         </div>
 
-        <footer id="contact" class="py-12 text-center border-t border-white/5 mt-12">
-            <h2 class="text-2xl font-bold brand-font mb-8">ESTABLISH UPLINK</h2>
-            <div class="terminal-container w-full max-w-2xl mx-auto">
-                <!-- Added missing status display element to fix JS error -->
+        <footer id="contact" class="py-24 px-6 md:px-20 text-center relative overflow-hidden min-h-screen flex flex-col justify-center">
+            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/10 to-transparent pointer-events-none"></div>
+            
+            <h2 class="text-4xl md:text-6xl font-black brand-font mb-4 tracking-tighter hover:tracking-wide transition-all duration-700 cursor-pointer hover-trigger">
+                ESTABLISH UPLINK
+            </h2>
+            
+            <div class="terminal-container w-full z-10 mt-12">
                 <div class="status-display" id="terminal-status">SYSTEM STANDBY // AWAITING INPUT</div>
-                
+
                 <div class="terminal-grid">
-                    <a href="mailto:abhiramkrishna15@gmail.com" class="signal-card group hover-trigger" style="--signal-color: #ff0055; --signal-glow: rgba(255, 0, 85, 0.4);" onmouseenter="updateStatus('INITIATING SECURE MAIL PROTOCOL')" onmouseleave="resetStatus()">
+                    <a href="mailto:abhiramkrish8@gmail.com" class="signal-card group hover-trigger" style="--signal-color: #ff0055; --signal-glow: rgba(255, 0, 85, 0.4);" onmouseenter="updateStatus('INITIATING SECURE MAIL PROTOCOL')" onmouseleave="resetStatus()">
                         <div class="text-left">
                             <div class="text-xs text-gray-500 tech-font">CONNECT</div>
                             <div class="font-bold">EMAIL</div>
                         </div>
                         <i class="fas fa-envelope signal-icon"></i>
                     </a>
+
                     <a href="https://www.linkedin.com/in/abhiramkrishna1/" target="_blank" class="signal-card group hover-trigger" style="--signal-color: #0077b5; --signal-glow: rgba(0, 119, 181, 0.4);" onmouseenter="updateStatus('ACCESSING PROFESSIONAL NETWORK')" onmouseleave="resetStatus()">
                         <div class="text-left">
                             <div class="text-xs text-gray-500 tech-font">LINKEDIN</div>
@@ -554,6 +540,7 @@
                         </div>
                         <i class="fab fa-linkedin-in signal-icon"></i>
                     </a>
+
                     <a href="https://x.com/abhiramkriss" target="_blank" class="signal-card group hover-trigger" style="--signal-color: #ffffff; --signal-glow: rgba(255, 255, 255, 0.4);" onmouseenter="updateStatus('DECODING SHORT-WAVE TRANSMISSIONS')" onmouseleave="resetStatus()">
                         <div class="text-left">
                             <div class="text-xs text-gray-500 tech-font">TWITTER / X</div>
@@ -561,6 +548,7 @@
                         </div>
                         <i class="fab fa-twitter signal-icon"></i>
                     </a>
+
                     <a href="https://github.com/abhiramkrishna" target="_blank" class="signal-card group hover-trigger" style="--signal-color: #2dba4e; --signal-glow: rgba(45, 186, 78, 0.4);" onmouseenter="updateStatus('INSPECTING SOURCE CODE REPOSITORIES')" onmouseleave="resetStatus()">
                         <div class="text-left">
                             <div class="text-xs text-gray-500 tech-font">GITHUB</div>
@@ -568,6 +556,7 @@
                         </div>
                         <i class="fab fa-github signal-icon"></i>
                     </a>
+
                     <a href="https://www.instagram.com/_abhiram__krishna_/" target="_blank" class="signal-card group hover-trigger" style="--signal-color: #d62976; --signal-glow: rgba(214, 41, 118, 0.4);" onmouseenter="updateStatus('LOADING VISUAL LOGS')" onmouseleave="resetStatus()">
                         <div class="text-left">
                             <div class="text-xs text-gray-500 tech-font">INSTAGRAM</div>
@@ -577,7 +566,12 @@
                     </a>
                 </div>
             </div>
+
+            <p class="mt-24 text-xs text-gray-600 tech-font tracking-widest opacity-60 hover:opacity-100 transition-opacity">
+                DESIGNED WITH PASSION, CRAFTED WITH LOVE - ABHIRAM KRISHNA
+            </p>
         </footer>
+
     </main>
 
     <script>
@@ -613,16 +607,20 @@
 
         function updateStatus(text) {
             const statusEl = document.getElementById('terminal-status');
-            statusEl.innerText = text + '...';
-            statusEl.style.textShadow = "0 0 15px rgba(0, 229, 255, 0.8)";
-            statusEl.style.color = "#fff";
+            if (statusEl) {
+                statusEl.innerText = text + '...';
+                statusEl.style.textShadow = "0 0 15px rgba(0, 229, 255, 0.8)";
+                statusEl.style.color = "#fff";
+            }
         }
 
         function resetStatus() {
             const statusEl = document.getElementById('terminal-status');
-            statusEl.innerText = 'SYSTEM STANDBY // AWAITING INPUT';
-            statusEl.style.textShadow = "0 0 10px rgba(0, 229, 255, 0.5)";
-            statusEl.style.color = "#00e5ff";
+            if (statusEl) {
+                statusEl.innerText = 'SYSTEM STANDBY // AWAITING INPUT';
+                statusEl.style.textShadow = "0 0 10px rgba(0, 229, 255, 0.5)";
+                statusEl.style.color = "#00e5ff";
+            }
         }
 
         const initBackgroundScene = () => {
